@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue-900: #0a1628;
+      --blue-800: #0d2240;
+      --blue-700: #0f3460;
+      --blue-600: #1565c0;
+      --blue-500: #1976d2;
+      --blue-400: #42a5f5;
+      --blue-300: #90caf9;
+      --blue-100: #e3f2fd;
+      --blue-50:  #f0f8ff;
+      --white:    #ffffff;
+      --gray-900: #1a1a2e;
+      --gray-600: #5a6a7a;
+      --gray-400: #9eaab8;
+      --gray-200: #e8edf2;
+      --gray-100: #f5f7fa;
+      --red-500:  #ef4444;
+      --green-500:#22c55e;
+      --shadow-sm: 0 1px 3px rgba(21,101,192,0.08);
+      --shadow-md: 0 4px 20px rgba(21,101,192,0.12);
+      --shadow-lg: 0 8px 40px rgba(21,101,192,0.18);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --font-heading: 'Outfit', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, var(--blue-50) 0%, #dceeff 50%, var(--blue-100) 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px 16px;
+      color: var(--gray-900);
+      /* iOS scroll fix */
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ── Language Toggle ─────────────────────────────────── */
+    .lang-toggle {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      gap: 6px;
+    }
+    .lang-btn {
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      transition: all 0.15s;
+      border: 1.5px solid var(--blue-300);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .lang-btn.active {
+      background: var(--blue-600);
+      color: white;
+      border-color: var(--blue-600);
+    }
+    .lang-btn:not(.active) {
+      background: white;
+      color: var(--blue-600);
+    }
+
+    /* ── Form Card ───────────────────────────────────────── */
+    .form-card {
+      max-width: 860px;
+      margin: 0 auto;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    /* ── Form Header ─────────────────────────────────────── */
+    .form-header {
+      background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-500) 100%);
+      padding: 40px 48px 32px;
+      text-align: center;
+    }
+    .form-header h1 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    /* ── Form Body ───────────────────────────────────────── */
+    .form-body {
+      padding: 40px 48px;
+    }
+    .form-body form {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* ── Field Group ─────────────────────────────────────── */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .field-label {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--blue-700);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .field-label .required {
+      color: var(--red-500);
+      margin-left: 3px;
+    }
+
+    /* ── Inputs ──────────────────────────────────────────── */
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--gray-900);
+      background: var(--gray-100);
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--blue-400);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(66,165,245,0.15);
+    }
+    input.error, select.error, textarea.error {
+      border-color: var(--red-500);
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    select {
+      background-color: var(--gray-100);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231565c0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    /* ── Error Message ───────────────────────────────────── */
+    .error-msg {
+      font-size: 0.78rem;
+      color: var(--red-500);
+      margin-top: 4px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    /* ── Field Hint ──────────────────────────────────────── */
+    .field-hint {
+      font-size: 0.78rem;
+      color: var(--gray-600);
+      margin-top: 4px;
+    }
+
+    /* ── Checkbox Grid ───────────────────────────────────── */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+      background: var(--gray-100);
+      font-size: 0.88rem;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .checkbox-item:hover {
+      border-color: var(--blue-400);
+      background: var(--blue-50);
+    }
+    .checkbox-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--blue-600);
+      cursor: pointer;
+      flex-shrink: 0;
+      -webkit-appearance: checkbox;
+      appearance: checkbox;
+    }
+    .checkbox-item.checked {
+      border-color: var(--blue-500);
+      background: var(--blue-100);
+      color: var(--blue-700);
+      font-weight: 600;
+    }
+
+    /* ── Subcategory Panel ───────────────────────────────── */
+    .subcategory-panel {
+      display: none;
+      margin-top: 12px;
+      padding: 16px;
+      background: var(--blue-50);
+      border: 1.5px solid var(--blue-100);
+      border-radius: var(--radius-sm);
+    }
+    .subcategory-panel.visible { display: block; }
+    .subcategory-label {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.78rem;
+      color: var(--blue-600);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    /* ── Description + R&D ───────────────────────────────── */
+    .description-wrapper { position: relative; }
+    .description-wrapper textarea { padding-bottom: 40px; }
+    .rd-checkbox-inline {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      cursor: pointer;
+      background: rgba(255,255,255,0.9);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .rd-checkbox-inline input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+      accent-color: var(--blue-600);
+      -webkit-appearance: checkbox;
+      appearance: checkbox;
+    }
+
+    /* ── Custom Country Dropdown ─────────────────────────── */
+    .country-dropdown { position: relative; }
+    .country-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .country-search-input {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--gray-900);
+      background: var(--gray-100);
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      box-sizing: border-box;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .country-search-input:focus {
+      outline: none;
+      border-color: var(--blue-400);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(66,165,245,0.15);
+      cursor: text;
+    }
+    .country-search-input.error {
+      border-color: var(--red-500);
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+    }
+    .country-search-input.selected { font-weight: 500; }
+    .country-chevron {
+      position: absolute;
+      right: 14px;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+    .country-dropdown.open .country-chevron { transform: rotate(180deg); }
+    .country-list {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1.5px solid var(--blue-300);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 200;
+      margin: 0;
+      padding: 6px 0;
+      list-style: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .country-dropdown.open .country-list { display: block; }
+    .country-list li {
+      padding: 10px 16px;
+      font-size: 0.92rem;
+      color: var(--gray-900);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .country-list li:hover,
+    .country-list li.highlighted {
+      background: var(--blue-50);
+      color: var(--blue-700);
+    }
+    .country-list li.active-item {
+      background: var(--blue-100);
+      color: var(--blue-700);
+      font-weight: 600;
+    }
+    .country-list li .match-highlight {
+      background: #fff176;
+      border-radius: 2px;
+      padding: 0 1px;
+      color: var(--blue-800);
+      font-weight: 700;
+    }
+    .country-list li.no-result {
+      color: var(--gray-400);
+      font-style: italic;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────── */
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 32px;
+    }
+    .btn-submit {
+      background: linear-gradient(135deg, var(--blue-600), var(--blue-400));
+      color: white;
+      border: none;
+      padding: 14px 48px;
+      border-radius: 50px;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(21,101,192,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(21,101,192,0.45); }
+    .btn-reset {
+      background: white;
+      color: var(--blue-600);
+      border: 2px solid var(--blue-300);
+      padding: 14px 36px;
+      border-radius: 50px;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .btn-reset:hover { background: var(--blue-50); border-color: var(--blue-500); }
+
+    /* ── Success Popup ───────────────────────────────────── */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,22,40,0.4);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .popup-overlay.visible { opacity: 1; pointer-events: auto; }
+    .success-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.85);
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 40px 56px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(21,101,192,0.25);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .success-popup.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .success-popup .icon {
+      width: 60px; height: 60px;
+      background: var(--green-500);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 28px; color: white;
+    }
+    .success-popup h2 {
+      font-family: var(--font-heading);
+      font-size: 1.6rem; font-weight: 800;
+      color: var(--blue-700);
+      margin: 0 0 8px;
+    }
+    .success-popup p { color: var(--gray-600); font-size: 0.95rem; margin: 0; }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .form-body { padding: 24px 20px; }
+      .form-header { padding: 28px 20px 20px; }
+      .form-header h1 { font-size: 1.4rem; }
+      .checkbox-grid { grid-template-columns: repeat(2, 1fr); }
+      .btn-row { flex-direction: column; align-items: stretch; }
+      .btn-submit, .btn-reset { text-align: center; }
+    }
+    @media (min-width: 601px) and (max-width: 860px) {
+      .checkbox-grid { grid-template-columns: repeat(3, 1fr); }
+      .form-body { padding: 32px 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Language Toggle -->
+  <div class="lang-toggle">
+    <button class="lang-btn active" data-lang="EN" onclick="switchLang('EN')">EN</button>
+    <button class="lang-btn" data-lang="TH" onclick="switchLang('TH')">TH</button>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <div class="form-header">
+      <h1>Contact Form</h1>
+    </div>
+    <div class="form-body">
+
+      <form
+        id="leadForm"
+        action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00Dd5000003aMgD"
+        method="POST"
+      >
+        <input type="hidden" name="oid" value="00Dd5000003aMgD" />
+        <input type="hidden" name="retURL" value="" />
+        <!-- Debug:
+        <input type="hidden" name="debug" value="1" />
+        <input type="hidden" name="debugEmail" value="sf-admin@apb.co.th" />
+        -->
+
+        <!-- 1. Record Type -->
+        <div class="field-group">
+          <label class="field-label">
+            <span data-field="recordType">Record Type</span><span class="required">*</span>
+          </label>
+          <select id="recordType" name="recordType">
+            <option value="012d5000000YzsJ" selected>Corporate</option>
+            <option value="012d5000000YzsK">Individual</option>
+          </select>
+          <span class="error-msg" id="recordType_err"></span>
+        </div>
+
+        <!-- 2. Product Category + Subcategories -->
+        <div class="field-group">
+          <label class="field-label">
+            <span data-field="productCategory">Product Category</span>
+          </label>
+          <div class="checkbox-grid">
+            <label class="checkbox-item">
+              <input type="checkbox" name="00NQ800000Pvh0E" value="Coconut Rolls" />
+              Coconut Rolls
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="00NQ800000Pvh0E" value="Wafer Rolls" />
+              Wafer Rolls
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="00NQ800000Pvh0E" value="Crepes" />
+              Crepes
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="00NQ800000Pvh0E" value="Brownie" />
+              Brownie
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="00NQ800000Pvh0E" value="Tamarind Candy" />
+              Tamarind Candy
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="00NQ800000Pvh0E" value="Others" />
+              Others
+            </label>
+          </div>
+
+          <!-- 2a. Coconut Roll Subcategory -->
+          <div class="subcategory-panel" id="panel-coconut-roll">
+            <div class="subcategory-label" data-field="subCoconutRoll">Coconut Roll Subcategory</div>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pydo5" value="Standards" /> Standards</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pydo5" value="Filling" /> Filling</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pydo5" value="Vegan" /> Vegan</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pydo5" value="Dipping/Coated" /> Dipping/Coated</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pydo5" value="Seasoning" /> Seasoning</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pydo5" value="Meat Shredded" /> Meat Shredded</label>
+            </div>
+          </div>
+
+          <!-- 2b. Wafer Roll Subcategory -->
+          <div class="subcategory-panel" id="panel-wafer-roll">
+            <div class="subcategory-label" data-field="subWaferRoll">Wafer Roll Subcategory</div>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyedh" value="Standards" /> Standards</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyedh" value="Filling" /> Filling</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyedh" value="Seasoning" /> Seasoning</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyedh" value="Dipping/Coated" /> Dipping/Coated</label>
+            </div>
+          </div>
+
+          <!-- 2c. Coconut Crepe Subcategory -->
+          <div class="subcategory-panel" id="panel-crepe">
+            <div class="subcategory-label" data-field="subCrepe">Coconut Crepe Subcategory</div>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyf0H" value="Standards" /> Standards</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyf0H" value="Filling" /> Filling</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyf0H" value="Dipping/Coated" /> Dipping/Coated</label>
+            </div>
+          </div>
+
+          <!-- 2d. Coconut Brownie Subcategory -->
+          <div class="subcategory-panel" id="panel-brownie">
+            <div class="subcategory-label" data-field="subBrownie">Coconut Brownie Subcategory</div>
+            <div class="checkbox-grid">
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyf1t" value="Chocolate" /> Chocolate</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyf1t" value="Mocha" /> Mocha</label>
+              <label class="checkbox-item"><input type="checkbox" name="00NQ800000Pyf1t" value="Other" /> Other</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Product Type -->
+        <div class="field-group">
+          <label class="field-label" for="productType">
+            <span data-field="productType">Product Type</span>
+          </label>
+          <select id="productType" name="00NQ800000Px1Uj">
+            <option value="">--None--</option>
+            <option value="OEM">OEM</option>
+            <option value="Own Brands">Own Brands</option>
+          </select>
+        </div>
+
+        <!-- 4. Product Interest (hidden by default) -->
+        <div class="field-group" id="product-interest-section" style="display:none;">
+          <label class="field-label">
+            <span data-field="productInterest">Product Interest</span>
+          </label>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRJ" value="KAEW" /> KAEW</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRJ" value="SNAXFARM" /> SNAXFARM</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRJ" value="Roll Max" /> Roll Max</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRJ" value="Papa Coco" /> Papa Coco</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRJ" value="Philong" /> Philong</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRJ" value="Vilai" /> Vilai</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRJ" value="Other" /> Other</label>
+          </div>
+        </div>
+
+        <!-- 5. Description + R&D -->
+        <div class="field-group">
+          <label class="field-label" for="description">
+            <span data-field="description">Description</span>
+          </label>
+          <div class="description-wrapper">
+            <textarea id="description" name="description" rows="5"></textarea>
+            <label class="rd-checkbox-inline">
+              <input type="checkbox" name="00Nd5000003JzRL" value="1" id="rdCheckbox" />
+              <span data-field="rdCheckbox">R&amp;D Need to Develop Product</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 6. Rank -->
+        <div class="field-group">
+          <label class="field-label" for="rank">
+            <span data-field="rank">Rank</span>
+          </label>
+          <select id="rank" name="00Nd5000003JzPl">
+            <option value="">--None--</option>
+            <option value="5-Star">5-Star</option>
+            <option value="4-Star">4-Star</option>
+            <option value="3-Star">3-Star</option>
+            <option value="2-Star">2-Star</option>
+            <option value="1-Star">1-Star</option>
+          </select>
+        </div>
+
+        <!-- 7. Name -->
+        <div class="field-group">
+          <label class="field-label" for="last_name">
+            <span data-field="name">Name</span><span class="required">*</span>
+          </label>
+          <input type="text" id="last_name" name="last_name" maxlength="80"
+            data-placeholder-en="Enter name" data-placeholder-th="กรอกชื่อ"
+            placeholder="Enter name" />
+          <span class="error-msg" id="last_name_err"></span>
+        </div>
+
+        <!-- 8. Title -->
+        <div class="field-group">
+          <label class="field-label" for="title">
+            <span data-field="title">Title</span>
+          </label>
+          <input type="text" id="title" name="title" maxlength="40"
+            data-placeholder-en="e.g. Managing Director" data-placeholder-th="เช่น กรรมการผู้จัดการ"
+            placeholder="e.g. Managing Director" />
+        </div>
+
+        <!-- 9. Company -->
+        <div class="field-group">
+          <label class="field-label" for="company">
+            <span data-field="company">Company</span><span class="required">*</span>
+          </label>
+          <input type="text" id="company" name="company" maxlength="40"
+            data-placeholder-en="Enter company name" data-placeholder-th="กรอกชื่อบริษัท"
+            placeholder="Enter company name" />
+          <span class="error-msg" id="company_err"></span>
+        </div>
+
+        <!-- 10. Business Type -->
+        <div class="field-group">
+          <label class="field-label">
+            <span data-field="businessType">Business Type</span>
+          </label>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Importer" /> Importer</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Exporter" /> Exporter</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Retailer" /> Retailer</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Wholesaler" /> Wholesaler</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Distributor" /> Distributor</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Supplier" /> Supplier</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Brand owner" /> Brand owner</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Manufacturer" /> Manufacturer</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzR8" value="Food Service" /> Food Service</label>
+          </div>
+        </div>
+
+        <!-- 11. Email -->
+        <div class="field-group">
+          <label class="field-label" for="email">
+            <span data-field="email">Email</span>
+          </label>
+          <input type="text" id="email" name="email" maxlength="80"
+            data-placeholder-en="example@email.com" data-placeholder-th="ตัวอย่าง@อีเมล.com"
+            placeholder="example@email.com" />
+        </div>
+
+        <!-- 12. Phone -->
+        <div class="field-group">
+          <label class="field-label" for="phone">
+            <span data-field="phone">Phone</span>
+          </label>
+          <input type="text" id="phone" name="phone" maxlength="40"
+            data-placeholder-en="e.g. +66 812345678 / +86 13800000000"
+            data-placeholder-th="เช่น +66 812345678 / +86 13800000000"
+            placeholder="e.g. +66 812345678 / +86 13800000000" />
+          <span class="field-hint" id="phoneHint"
+            data-en='For multiple numbers, separate with " / "'
+            data-th='หลายเบอร์ใช้ " / " คั่น'>For multiple numbers, separate with " / "</span>
+        </div>
+
+        <!-- 13. Mobile -->
+        <div class="field-group">
+          <label class="field-label" for="mobile">
+            <span data-field="mobile">Mobile</span>
+          </label>
+          <input type="text" id="mobile" name="mobile" maxlength="40"
+            data-placeholder-en="e.g. +66 812345678 / +86 13800000000"
+            data-placeholder-th="เช่น +66 812345678 / +86 13800000000"
+            placeholder="e.g. +66 812345678 / +86 13800000000" />
+          <span class="field-hint" id="mobileHint"
+            data-en='For multiple numbers, separate with " / "'
+            data-th='หลายเบอร์ใช้ " / " คั่น'>For multiple numbers, separate with " / "</span>
+        </div>
+
+        <!-- 14. Website -->
+        <div class="field-group">
+          <label class="field-label" for="url">
+            <span data-field="website">Website</span>
+          </label>
+          <input type="text" id="url" name="url" maxlength="80"
+            placeholder="https://www.example.com" />
+        </div>
+
+        <!-- 15. Country (Custom Searchable Dropdown) -->
+        <div class="field-group">
+          <label class="field-label">
+            <span data-field="country">Country</span><span class="required">*</span>
+          </label>
+          <input type="hidden" id="countrySelect" name="00Nd5000003JzPj" value="" />
+          <div class="country-dropdown" id="countryDropdown">
+            <div class="country-input-wrap" id="countryInputWrap">
+              <input
+                type="text"
+                id="countrySearch"
+                class="country-search-input"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                data-placeholder-en="Search country..."
+                data-placeholder-th="ค้นหาประเทศ..."
+                placeholder="Search country..."
+                readonly
+              />
+              <span class="country-chevron" id="countryChevron">
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1l5 5 5-5" stroke="#1565c0" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </div>
+            <ul class="country-list" id="countryList" role="listbox"></ul>
+          </div>
+          <span class="error-msg" id="countrySelect_err"></span>
+        </div>
+
+        <!-- 16. Follow Up -->
+        <div class="field-group">
+          <label class="field-label">
+            <span data-field="followUp">Follow Up</span>
+          </label>
+          <div class="checkbox-grid">
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRB" value="Send info" /> Send info</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRB" value="Send Quotation" /> Send Quotation</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRB" value="Send sample" /> Send sample</label>
+            <label class="checkbox-item"><input type="checkbox" name="00Nd5000003JzRB" value="Other" /> Other</label>
+          </div>
+        </div>
+
+        <!-- 17. Recorded By -->
+        <div class="field-group">
+          <label class="field-label" for="recordedBy">
+            <span data-field="recordedBy">Recorded By</span>
+          </label>
+          <select id="recordedBy" name="00NQ800000Px08r">
+            <option value="">--None--</option>
+            <option value="Raivin Kespanyarak (Pim)">Raivin Kespanyarak (Pim)</option>
+            <option value="Natnicha Tukangraham (Nut)">Natnicha Tukangraham (Nut)</option>
+            <option value="Kanokporn Sonchai (Praew)">Kanokporn Sonchai (Praew)</option>
+            <option value="Manasikarn Somchae (Tukta)">Manasikarn Somchae (Tukta)</option>
+            <option value="Paphawarin Khunsri (Winnie)">Paphawarin Khunsri (Winnie)</option>
+            <option value="Tharatorn Teerakunded (Orh)">Tharatorn Teerakunded (Orh)</option>
+            <option value="Natthapon Intharakaset (Boom)">Natthapon Intharakaset (Boom)</option>
+            <option value="Warut Saengwiman (Mix)">Warut Saengwiman (Mix)</option>
+            <option value="Jeerarat Khadthi (Baimint)">Jeerarat Khadthi (Baimint)</option>
+            <option value="Nattapon Chanruang (Noy)">Nattapon Chanruang (Noy)</option>
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-row">
+          <button type="submit" class="btn-submit">
+            <span data-field="submitBtn">Submit</span>
+          </button>
+          <button type="button" id="resetBtn" class="btn-reset">
+            <span data-field="resetBtn">Reset</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup-overlay" id="popupOverlay"></div>
+  <div class="success-popup" id="successPopup">
+    <div class="icon">✓</div>
+    <h2>Success</h2>
+    <p>Your data have been sent</p>
+  </div>
+
+  <script>
+    // ── Country Data ───────────────────────────────────────
+    const COUNTRIES = [
+      { v: 'Thailand',  l: 'Thailand' },
+      { v: 'AF', l: 'Afghanistan' },    { v: 'AL', l: 'Albania' },        { v: 'DZ', l: 'Algeria' },
+      { v: 'AD', l: 'Andorra' },        { v: 'AO', l: 'Angola' },         { v: 'AG', l: 'Antigua and Barbuda' },
+      { v: 'AR', l: 'Argentina' },      { v: 'AM', l: 'Armenia' },        { v: 'AU', l: 'Australia' },
+      { v: 'AT', l: 'Austria' },        { v: 'AZ', l: 'Azerbaijan' },     { v: 'BS', l: 'Bahamas' },
+      { v: 'BH', l: 'Bahrain' },        { v: 'BD', l: 'Bangladesh' },     { v: 'BB', l: 'Barbados' },
+      { v: 'BY', l: 'Belarus' },        { v: 'BE', l: 'Belgium' },        { v: 'BZ', l: 'Belize' },
+      { v: 'BJ', l: 'Benin' },          { v: 'BT', l: 'Bhutan' },         { v: 'BO', l: 'Bolivia' },
+      { v: 'BA', l: 'Bosnia and Herzegovina' }, { v: 'BW', l: 'Botswana' }, { v: 'BR', l: 'Brazil' },
+      { v: 'BN', l: 'Brunei' },         { v: 'BG', l: 'Bulgaria' },       { v: 'BF', l: 'Burkina Faso' },
+      { v: 'BI', l: 'Burundi' },        { v: 'CV', l: 'Cabo Verde' },     { v: 'KH', l: 'Cambodia' },
+      { v: 'CM', l: 'Cameroon' },       { v: 'CA', l: 'Canada' },         { v: 'CF', l: 'Central African Republic' },
+      { v: 'TD', l: 'Chad' },           { v: 'CL', l: 'Chile' },          { v: 'CN', l: 'China' },
+      { v: 'CO', l: 'Colombia' },       { v: 'KM', l: 'Comoros' },        { v: 'CD', l: 'Congo (DRC)' },
+      { v: 'CG', l: 'Congo (Republic)' }, { v: 'CR', l: 'Costa Rica' },  { v: 'HR', l: 'Croatia' },
+      { v: 'CU', l: 'Cuba' },           { v: 'CY', l: 'Cyprus' },         { v: 'CZ', l: 'Czech Republic' },
+      { v: 'DK', l: 'Denmark' },        { v: 'DJ', l: 'Djibouti' },       { v: 'DM', l: 'Dominica' },
+      { v: 'DO', l: 'Dominican Republic' }, { v: 'EC', l: 'Ecuador' },   { v: 'EG', l: 'Egypt' },
+      { v: 'SV', l: 'El Salvador' },    { v: 'GB', l: 'United Kingdom' }, { v: 'ER', l: 'Eritrea' },
+      { v: 'EE', l: 'Estonia' },        { v: 'ET', l: 'Ethiopia' },       { v: 'FJ', l: 'Fiji' },
+      { v: 'FI', l: 'Finland' },        { v: 'FR', l: 'France' },         { v: 'GA', l: 'Gabon' },
+      { v: 'GM', l: 'Gambia' },         { v: 'GE', l: 'Georgia' },        { v: 'DE', l: 'Germany' },
+      { v: 'GH', l: 'Ghana' },          { v: 'GR', l: 'Greece' },         { v: 'GD', l: 'Grenada' },
+      { v: 'GT', l: 'Guatemala' },      { v: 'GN', l: 'Guinea' },         { v: 'GW', l: 'Guinea-Bissau' },
+      { v: 'GY', l: 'Guyana' },         { v: 'HT', l: 'Haiti' },          { v: 'HN', l: 'Honduras' },
+      { v: 'HK', l: 'Hong Kong' },      { v: 'HU', l: 'Hungary' },        { v: 'IS', l: 'Iceland' },
+      { v: 'IN', l: 'India' },          { v: 'ID', l: 'Indonesia' },      { v: 'IR', l: 'Iran' },
+      { v: 'IQ', l: 'Iraq' },           { v: 'IE', l: 'Ireland' },        { v: 'IL', l: 'Israel' },
+      { v: 'IT', l: 'Italy' },          { v: 'JM', l: 'Jamaica' },        { v: 'JP', l: 'Japan' },
+      { v: 'JO', l: 'Jordan' },         { v: 'KZ', l: 'Kazakhstan' },     { v: 'KE', l: 'Kenya' },
+      { v: 'KI', l: 'Kiribati' },       { v: 'KP', l: 'North Korea' },    { v: 'KR', l: 'South Korea' },
+      { v: 'KW', l: 'Kuwait' },         { v: 'KG', l: 'Kyrgyzstan' },     { v: 'LA', l: 'Laos' },
+      { v: 'LV', l: 'Latvia' },         { v: 'LB', l: 'Lebanon' },        { v: 'LS', l: 'Lesotho' },
+      { v: 'LR', l: 'Liberia' },        { v: 'LY', l: 'Libya' },          { v: 'LI', l: 'Liechtenstein' },
+      { v: 'LT', l: 'Lithuania' },      { v: 'LU', l: 'Luxembourg' },     { v: 'MG', l: 'Madagascar' },
+      { v: 'MW', l: 'Malawi' },         { v: 'MY', l: 'Malaysia' },       { v: 'MV', l: 'Maldives' },
+      { v: 'ML', l: 'Mali' },           { v: 'MT', l: 'Malta' },          { v: 'MH', l: 'Marshall Islands' },
+      { v: 'MR', l: 'Mauritania' },     { v: 'MU', l: 'Mauritius' },      { v: 'MX', l: 'Mexico' },
+      { v: 'MD', l: 'Moldova' },        { v: 'MC', l: 'Monaco' },         { v: 'MN', l: 'Mongolia' },
+      { v: 'ME', l: 'Montenegro' },     { v: 'MA', l: 'Morocco' },        { v: 'MZ', l: 'Mozambique' },
+      { v: 'MM', l: 'Myanmar' },        { v: 'NA', l: 'Namibia' },        { v: 'NR', l: 'Nauru' },
+      { v: 'NP', l: 'Nepal' },          { v: 'NL', l: 'Netherlands' },    { v: 'NZ', l: 'New Zealand' },
+      { v: 'NI', l: 'Nicaragua' },      { v: 'NE', l: 'Niger' },          { v: 'NG', l: 'Nigeria' },
+      { v: 'MK', l: 'North Macedonia' }, { v: 'NO', l: 'Norway' },        { v: 'OM', l: 'Oman' },
+      { v: 'PK', l: 'Pakistan' },       { v: 'PW', l: 'Palau' },          { v: 'PA', l: 'Panama' },
+      { v: 'PG', l: 'Papua New Guinea' }, { v: 'PY', l: 'Paraguay' },    { v: 'PE', l: 'Peru' },
+      { v: 'PH', l: 'Philippines' },    { v: 'PL', l: 'Poland' },         { v: 'PT', l: 'Portugal' },
+      { v: 'QA', l: 'Qatar' },          { v: 'RO', l: 'Romania' },        { v: 'RU', l: 'Russia' },
+      { v: 'RW', l: 'Rwanda' },         { v: 'KN', l: 'Saint Kitts and Nevis' }, { v: 'LC', l: 'Saint Lucia' },
+      { v: 'VC', l: 'Saint Vincent and the Grenadines' }, { v: 'WS', l: 'Samoa' }, { v: 'SM', l: 'San Marino' },
+      { v: 'SA', l: 'Saudi Arabia' },   { v: 'SN', l: 'Senegal' },        { v: 'RS', l: 'Serbia' },
+      { v: 'SC', l: 'Seychelles' },     { v: 'SL', l: 'Sierra Leone' },   { v: 'SG', l: 'Singapore' },
+      { v: 'SK', l: 'Slovakia' },       { v: 'SI', l: 'Slovenia' },       { v: 'SB', l: 'Solomon Islands' },
+      { v: 'SO', l: 'Somalia' },        { v: 'ZA', l: 'South Africa' },   { v: 'SS', l: 'South Sudan' },
+      { v: 'ES', l: 'Spain' },          { v: 'LK', l: 'Sri Lanka' },      { v: 'SD', l: 'Sudan' },
+      { v: 'SR', l: 'Suriname' },       { v: 'SE', l: 'Sweden' },         { v: 'CH', l: 'Switzerland' },
+      { v: 'SY', l: 'Syria' },          { v: 'TW', l: 'Taiwan' },         { v: 'TJ', l: 'Tajikistan' },
+      { v: 'TZ', l: 'Tanzania' },       { v: 'TG', l: 'Togo' },           { v: 'TO', l: 'Tonga' },
+      { v: 'TT', l: 'Trinidad and Tobago' }, { v: 'TN', l: 'Tunisia' },  { v: 'TR', l: 'Turkey' },
+      { v: 'TM', l: 'Turkmenistan' },   { v: 'TV', l: 'Tuvalu' },         { v: 'UG', l: 'Uganda' },
+      { v: 'UA', l: 'Ukraine' },        { v: 'AE', l: 'United Arab Emirates' }, { v: 'US', l: 'United States' },
+      { v: 'UY', l: 'Uruguay' },        { v: 'UZ', l: 'Uzbekistan' },     { v: 'VU', l: 'Vanuatu' },
+      { v: 'VA', l: 'Vatican City' },   { v: 'VE', l: 'Venezuela' },      { v: 'VN', l: 'Vietnam' },
+      { v: 'YE', l: 'Yemen' },          { v: 'ZM', l: 'Zambia' },         { v: 'ZW', l: 'Zimbabwe' },
+    ];
+
+    // ── iOS detection ──────────────────────────────────────
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    // ── Country Dropdown ───────────────────────────────────
+    const countryDropdown  = document.getElementById('countryDropdown');
+    const countrySearch    = document.getElementById('countrySearch');
+    const countryList      = document.getElementById('countryList');
+    const countryHidden    = document.getElementById('countrySelect');
+    let countrySelectedVal = '';
+    let highlightedIndex   = -1;
+    let dropdownOpen       = false;
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function highlightMatch(label, query) {
+      if (!query) return escapeHtml(label);
+      const idx = label.toLowerCase().indexOf(query.toLowerCase());
+      if (idx === -1) return escapeHtml(label);
+      return escapeHtml(label.slice(0, idx))
+        + '<span class="match-highlight">' + escapeHtml(label.slice(idx, idx + query.length)) + '</span>'
+        + escapeHtml(label.slice(idx + query.length));
+    }
+
+    function renderCountryList(query) {
+      const q = (query || '').trim();
+      const filtered = q
+        ? COUNTRIES.filter(c => c.l.toLowerCase().includes(q.toLowerCase()))
+        : COUNTRIES;
+      countryList.innerHTML = '';
+      highlightedIndex = -1;
+      if (filtered.length === 0) {
+        const li = document.createElement('li');
+        li.className = 'no-result';
+        li.textContent = lang.current === 'TH' ? 'ไม่พบประเทศที่ค้นหา' : 'No countries found';
+        countryList.appendChild(li);
+        return;
+      }
+      filtered.forEach((c) => {
+        const li = document.createElement('li');
+        li.innerHTML = highlightMatch(c.l, q);
+        li.dataset.value = c.v;
+        li.dataset.label = c.l;
+        if (c.v === countrySelectedVal) li.classList.add('active-item');
+        li.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          selectCountry(this.dataset.value, this.dataset.label);
+        });
+        li.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          selectCountry(this.dataset.value, this.dataset.label);
+        });
+        countryList.appendChild(li);
+      });
+    }
+
+    function openCountryDropdown() {
+      if (dropdownOpen) return;
+      dropdownOpen = true;
+      countryDropdown.classList.add('open');
+      // On iOS: remove readonly so keyboard appears
+      countrySearch.removeAttribute('readonly');
+      countrySearch.value = '';
+      renderCountryList('');
+      // scroll active item into view
+      setTimeout(() => {
+        const active = countryList.querySelector('.active-item');
+        if (active) active.scrollIntoView({ block: 'nearest' });
+      }, 50);
+    }
+
+    function closeCountryDropdown() {
+      if (!dropdownOpen) return;
+      dropdownOpen = false;
+      countryDropdown.classList.remove('open');
+      highlightedIndex = -1;
+      // Restore readonly to prevent iOS auto-keyboard on next tap
+      countrySearch.setAttribute('readonly', '');
+      // Restore selected label or clear
+      if (countrySelectedVal) {
+        const found = COUNTRIES.find(c => c.v === countrySelectedVal);
+        if (found) countrySearch.value = found.l;
+      } else {
+        countrySearch.value = '';
+      }
+    }
+
+    function selectCountry(value, label) {
+      countrySelectedVal = value;
+      countryHidden.value = value;
+      countrySearch.classList.add('selected');
+      countrySearch.classList.remove('error');
+      const err = document.getElementById('countrySelect_err');
+      if (err) err.classList.remove('visible');
+      closeCountryDropdown();
+    }
+
+    // Tap / click on input wrap → open
+    document.getElementById('countryInputWrap').addEventListener('click', function(e) {
+      if (dropdownOpen) {
+        closeCountryDropdown();
+        countrySearch.blur();
+      } else {
+        openCountryDropdown();
+        countrySearch.focus();
+      }
+    });
+    // Prevent double-fire on iOS
+    document.getElementById('countryInputWrap').addEventListener('touchend', function(e) {
+      e.preventDefault();
+      if (dropdownOpen) {
+        closeCountryDropdown();
+        countrySearch.blur();
+      } else {
+        openCountryDropdown();
+        countrySearch.focus();
+      }
+    });
+
+    countrySearch.addEventListener('input', function() {
+      renderCountryList(this.value);
+    });
+
+    countrySearch.addEventListener('blur', function() {
+      // Delay to allow item selection to fire first
+      setTimeout(closeCountryDropdown, 200);
+    });
+
+    // Keyboard navigation (desktop)
+    countrySearch.addEventListener('keydown', function(e) {
+      const items = [...countryList.querySelectorAll('li:not(.no-result)')];
+      if (!items.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        highlightedIndex = Math.min(highlightedIndex + 1, items.length - 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        highlightedIndex = Math.max(highlightedIndex - 1, 0);
+      } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+        e.preventDefault();
+        const item = items[highlightedIndex];
+        if (item) selectCountry(item.dataset.value, item.dataset.label);
+        return;
+      } else if (e.key === 'Escape') {
+        closeCountryDropdown();
+        countrySearch.blur();
+        return;
+      } else { return; }
+      items.forEach((li, i) => li.classList.toggle('highlighted', i === highlightedIndex));
+      items[highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+    });
+
+    // Close when clicking/touching outside
+    document.addEventListener('touchstart', function(e) {
+      if (!countryDropdown.contains(e.target)) closeCountryDropdown();
+    });
+    document.addEventListener('mousedown', function(e) {
+      if (!countryDropdown.contains(e.target)) closeCountryDropdown();
+    });
+
+    // ── Language ───────────────────────────────────────────
+    const lang = { current: 'EN' };
+    const labels = {
+      recordType:        { EN: 'Record Type',                 TH: 'ประเภทลูกค้า' },
+      productCategory:   { EN: 'Product Category',            TH: 'หมวดสินค้า' },
+      subCoconutRoll:    { EN: 'Coconut Roll Subcategory',    TH: 'ประเภทย่อย — Coconut Roll' },
+      subWaferRoll:      { EN: 'Wafer Roll Subcategory',      TH: 'ประเภทย่อย — Wafer Roll' },
+      subCrepe:          { EN: 'Coconut Crepe Subcategory',   TH: 'ประเภทย่อย — Coconut Crepe' },
+      subBrownie:        { EN: 'Coconut Brownie Subcategory', TH: 'ประเภทย่อย — Coconut Brownie' },
+      productType:       { EN: 'Product Type',                TH: 'ประเภทสินค้า' },
+      productInterest:   { EN: 'Product Interest',            TH: 'สินค้าที่สนใจ' },
+      description:       { EN: 'Description',                 TH: 'รายละเอียด' },
+      rdCheckbox:        { EN: 'R&D Need to Develop Product', TH: 'ต้องการให้ R&D พัฒนาสินค้า' },
+      rank:              { EN: 'Rank',                        TH: 'ระดับ' },
+      name:              { EN: 'Name',                        TH: 'ชื่อ' },
+      title:             { EN: 'Title',                       TH: 'ตำแหน่ง' },
+      company:           { EN: 'Company',                     TH: 'บริษัท' },
+      businessType:      { EN: 'Business Type',               TH: 'ประเภทธุรกิจ' },
+      email:             { EN: 'Email',                       TH: 'อีเมล' },
+      phone:             { EN: 'Phone',                       TH: 'เบอร์โทรศัพท์' },
+      mobile:            { EN: 'Mobile',                      TH: 'มือถือ' },
+      website:           { EN: 'Website',                     TH: 'เว็บไซต์' },
+      country:           { EN: 'Country',                     TH: 'ประเทศ' },
+      followUp:          { EN: 'Follow Up',                   TH: 'การติดตาม' },
+      recordedBy:        { EN: 'Recorded By',                 TH: 'บันทึกโดย' },
+      submitBtn:         { EN: 'Submit',                      TH: 'ส่งข้อมูล' },
+      resetBtn:          { EN: 'Reset',                       TH: 'ล้างข้อมูล' },
+    };
+
+    function switchLang(newLang) {
+      lang.current = newLang;
+      document.querySelectorAll('[data-field]').forEach(el => {
+        const key = el.dataset.field;
+        if (labels[key]) el.textContent = labels[key][newLang];
+      });
+      document.querySelectorAll('[data-placeholder-en]').forEach(el => {
+        if (el === countrySearch) return; // handled separately
+        el.placeholder = newLang === 'EN' ? el.dataset.placeholderEn : el.dataset.placeholderTh;
+      });
+      // Country search placeholder
+      countrySearch.placeholder = newLang === 'EN'
+        ? countrySearch.dataset.placeholderEn
+        : countrySearch.dataset.placeholderTh;
+      // Hints
+      ['phoneHint', 'mobileHint'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = el.dataset[newLang.toLowerCase()];
+      });
+      // Select blank options
+      document.querySelectorAll('select option[value=""]').forEach(opt => {
+        opt.textContent = newLang === 'EN' ? '--None--' : '-- ไม่ระบุ --';
+      });
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === newLang);
+      });
+    }
+
+    // ── Product Category → Subcategory Show/Hide ───────────
+    const subcategoryMap = {
+      'Coconut Rolls': 'panel-coconut-roll',
+      'Wafer Rolls':   'panel-wafer-roll',
+      'Crepes':        'panel-crepe',
+      'Brownie':       'panel-brownie',
+    };
+    document.querySelectorAll('input[name="00NQ800000Pvh0E"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const panelId = subcategoryMap[cb.value];
+        if (!panelId) return;
+        const panel = document.getElementById(panelId);
+        if (cb.checked) {
+          panel.classList.add('visible');
+        } else {
+          panel.classList.remove('visible');
+          panel.querySelectorAll('input[type="checkbox"]').forEach(sub => {
+            sub.checked = false;
+            sub.closest('.checkbox-item')?.classList.remove('checked');
+          });
+        }
+      });
+    });
+
+    // ── Product Type → Product Interest Show/Hide ──────────
+    document.getElementById('productType').addEventListener('change', function() {
+      const val = this.value;
+      const interestSection = document.getElementById('product-interest-section');
+      const existingHidden  = document.getElementById('oem-hidden-input');
+      if (existingHidden) existingHidden.remove();
+
+      if (val === 'OEM') {
+        interestSection.style.display = 'none';
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.id   = 'oem-hidden-input';
+        hidden.name = '00Nd5000003JzRJ';
+        hidden.value = 'OEM';
+        document.getElementById('leadForm').appendChild(hidden);
+        interestSection.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+          cb.closest('.checkbox-item')?.classList.remove('checked');
+        });
+      } else if (val === 'Own Brands') {
+        interestSection.style.display = 'block';
+      } else {
+        interestSection.style.display = 'none';
+      }
+    });
+
+    // ── Validation ─────────────────────────────────────────
+    function validateForm() {
+      let valid = true;
+      const required = [
+        { id: 'recordType', msgEN: 'Please select Record Type', msgTH: 'กรุณาเลือกประเภทลูกค้า' },
+        { id: 'last_name',  msgEN: 'Please enter Name',         msgTH: 'กรุณากรอกชื่อ' },
+        { id: 'company',    msgEN: 'Please enter Company',      msgTH: 'กรุณากรอกชื่อบริษัท' },
+      ];
+      required.forEach(({ id, msgEN, msgTH }) => {
+        const el  = document.getElementById(id);
+        const err = document.getElementById(id + '_err');
+        if (!el || !el.value.trim()) {
+          if (el) el.classList.add('error');
+          if (err) { err.textContent = lang.current === 'EN' ? msgEN : msgTH; err.classList.add('visible'); }
+          valid = false;
+        } else {
+          el.classList.remove('error');
+          if (err) err.classList.remove('visible');
+        }
+      });
+      // Country
+      const cErr = document.getElementById('countrySelect_err');
+      if (!countrySelectedVal) {
+        countrySearch.classList.add('error');
+        if (cErr) {
+          cErr.textContent = lang.current === 'EN' ? 'Please select Country' : 'กรุณาเลือกประเทศ';
+          cErr.classList.add('visible');
+        }
+        valid = false;
+      } else {
+        countrySearch.classList.remove('error');
+        if (cErr) cErr.classList.remove('visible');
+      }
+      return valid;
+    }
+
+    // ── Submit ─────────────────────────────────────────────
+    document.getElementById('leadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      // Cleanup iframes เก่าทั้งหมดก่อน เพื่อป้องกัน browser สับสนในครั้งที่ 2+
+      document.querySelectorAll('iframe[name^="sf_iframe_"]').forEach(el => el.remove());
+
+      // ใช้ชื่อ unique ทุกครั้งเพื่อให้ browser treat เป็น request ใหม่เสมอ
+      const iframeName = 'sf_iframe_' + Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      this.target = iframeName;
+      this.submit();
+
+      // Cleanup iframe หลัง Salesforce รับ request แล้ว (~5 วินาที)
+      setTimeout(() => iframe.remove(), 5000);
+
+      showSuccessPopup();
+      resetForm();
+    });
+
+    // ── Reset ──────────────────────────────────────────────
+    function resetForm() {
+      document.getElementById('leadForm').reset();
+      document.getElementById('recordType').value = '012d5000000YzsJ';
+      // Country
+      countrySelectedVal = '';
+      countryHidden.value = '';
+      countrySearch.value = '';
+      countrySearch.classList.remove('selected', 'error');
+      closeCountryDropdown();
+      // Checkbox visual
+      document.querySelectorAll('.checkbox-item').forEach(item => item.classList.remove('checked'));
+      // Subcategory panels
+      document.querySelectorAll('.subcategory-panel').forEach(p => p.classList.remove('visible'));
+      // Product Interest
+      document.getElementById('product-interest-section').style.display = 'none';
+      const oemHidden = document.getElementById('oem-hidden-input');
+      if (oemHidden) oemHidden.remove();
+      // Errors
+      document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+      document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('visible'));
+    }
+    document.getElementById('resetBtn').addEventListener('click', resetForm);
+
+    // ── Success Popup ──────────────────────────────────────
+    function showSuccessPopup() {
+      document.getElementById('successPopup').classList.add('visible');
+      document.getElementById('popupOverlay').classList.add('visible');
+      setTimeout(() => {
+        document.getElementById('successPopup').classList.remove('visible');
+        document.getElementById('popupOverlay').classList.remove('visible');
+      }, 3000);
+    }
+
+    // ── Checkbox Visual State ──────────────────────────────
+    document.querySelectorAll('.checkbox-item').forEach(item => {
+      const cb = item.querySelector('input[type="checkbox"]');
+      if (!cb) return;
+      cb.addEventListener('change', () => item.classList.toggle('checked', cb.checked));
+    });
+
+    // ── Clear error on input ───────────────────────────────
+    ['recordType', 'last_name', 'company'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      ['change', 'input'].forEach(ev => el.addEventListener(ev, () => {
+        el.classList.remove('error');
+        const err = document.getElementById(id + '_err');
+        if (err) err.classList.remove('visible');
+      }));
+    });
+  </script>
+</body>
+</html>
